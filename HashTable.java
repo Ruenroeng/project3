@@ -36,7 +36,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		
 	// TODO: comment and complete a default no-arg constructor
 	public HashTable() {
-
+//a single comment
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
