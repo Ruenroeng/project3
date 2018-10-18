@@ -15,6 +15,7 @@
  */
 
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 // TODO: comment and complete your HashTableADT implementation
@@ -31,12 +32,22 @@ import java.util.NoSuchElementException;
 //       you may use the hashCode provided by the <K key> object
 //       
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	
+  private static final Map<String, String> myMap;
+  static
+  {
+      myMap = new HashMap<String, String>();
+      myMap.put("a", "b");
+      myMap.put("c", "d");
+      myMap.get(arg0)
+  }
 	// TODO: ADD and comment DATA FIELD MEMBERS needed for your implementation
 		
 	// TODO: comment and complete a default no-arg constructor
 	public HashTable() {
-//a single comment
+	  int CAPACITY = 16;
+	  double LOAD_FACTOR = 0.75;
+	  
+	  
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
@@ -51,6 +62,13 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	}
 	
 	// TODO: comment and complete this method
+	/*
+	 *Returns:the value to which the specified key is mapped, or null if this map contains no mapping for the key
+	 *Throws:
+	 *ClassCastException - if the key is of an inappropriate type for this map (optional)
+   *NullPointerException - if the specified key is null and this mapdoes not permit null keys(optional)
+	 *
+	 */	
 	@Override
 	public V get(K key) throws NoSuchElementException {
 
