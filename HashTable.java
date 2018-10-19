@@ -49,7 +49,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		for (int i = 0; i<numBuckets; i++){
 			collisionBuckets.add(null);
 		}
-//a single comment
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
@@ -62,32 +61,65 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 			collisionBuckets.add(null);
 		}
 	}
-
+ 
 	// TODO: comment and complete this method
-	@Override
-	private int getIndex(K key){
-		int hash = key.hashCode();
-		int index = hash % numBuckets;
+	
+	private int getIndex(K key) {
+	  int hash = key.hashCode();
+		int index = -1;
+		index = hash % numBuckets;
+		if (index == -1) 
+		  throw new NoSuchElementException();
 		return index;
 	}
+  /*
+   *Returns:the value to which the specified key is mapped, or null if this map contains no 
+   *mapping for the key
+   *Throws:
+   *NoSuchElementException - if the specified key is null and this map does not
+   *permit null keys(optional)
+   *
+   */ 
+  @Override
+  public V get(K key) throws NoSuchElementException {
+    if (key == null)
+       return null;
+    int index = getIndex(key);
+    return null;
+  }
+  
+  // TODO: comment and complete this method
+  
+  private int getIndex(K key) {
+    int hash = key.hashCode();
+    int index = -1;
+    index = hash % numBuckets;
+    if (index == -1) 
+      throw new NoSuchElementException();
+    return index;
+  }
+  
+  /** inserts a <key,value> pair entry into the hash table if the key already exists in the table, 
+   *  replace existing value for that key with the value specified in this call to put.
+   *  Permits null values but not null keys and permits the same value to be paired 
+   *  with different key.
+   * 
+   *  throw IllegalArgumentException when key is null
+   */
+  @Override  
 	public void put(K key, V value) throws IllegalArgumentException {
-
+    if (key == null)
+      throw new IllegalArgumentException();
+    putIndex(key,value);
 	}
 	
-	// TODO: comment and complete this method
-	/*
-	 *Returns:the value to which the specified key is mapped, or null if this map contains no mapping for the key
-	 *Throws:
-	 *ClassCastException - if the key is of an inappropriate type for this map (optional)
-   *NullPointerException - if the specified key is null and this mapdoes not permit null keys(optional)
-	 *
-	 */	
-	@Override
-	public V get(K key) throws NoSuchElementException {
-		int index = getIndex(key);
-		return null;
-	}
-	
+  // TODO: comment and complete this method
+  
+  private void putIndex(K key, V value) {
+    int hash = key.hashCode();
+    int index = hash % numBuckets;
+    //Is this where we call a subclass called bucket or something?
+  }
 	// TODO: comment and complete this method
 	@Override
 	public void remove(K key) throws NoSuchElementException {
