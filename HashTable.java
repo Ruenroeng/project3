@@ -36,7 +36,8 @@ import java.util.ArrayList;
 //       you may use the hashCode provided by the <K key> object
 //       
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	private static class Node<K,V> extends ArrayList<K> {
+	//TODO: Documentation
+  private static class Node<K,V> extends ArrayList<K> {
 	  //Instance Variables
 	  private K key;
 	  private V value;
@@ -112,11 +113,15 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     int hash = key.hashCode();
     //Find which node to add to
     int index = hash % table.length;
-    //Loop throw ArrayList to try and find value.
+    Node<K,V> currNode = table[index];
+    
+    //Loop through ArrayList to try and find value.
     for (int i = 0; i < table[index].size(); i++) {
-      if (table[index].key == key)
-        return table[index].value;
+      if (currNode.key == key)
+        return currNode.value;
+    currNode = currNode.next;
     }
+      
       throw new NoSuchElementException();
   }
   
@@ -138,7 +143,19 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   
   private void putIndex(K key, V value) {
     int hash = key.hashCode();
-    int index = hash % numBuckets;
+    int index = hash % table.length;
+    Node<K,V> currNode = table[index];
+    for (int i = 0; i < table[index].size(); i++) {
+      
+      if (currNode.key == key) {
+        table[index].value = value;
+        return;
+      }
+      currNode = table[index].next;
+    }
+      table[index].add(key);
+    }
+    
     //Is this where we call a subclass called bucket or something?
   }
 	// TODO: comment and complete this method
