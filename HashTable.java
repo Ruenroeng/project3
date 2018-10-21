@@ -30,17 +30,17 @@ import java.util.ArrayList;
 // NOTE: you are not required to design your own algorithm for hashing,
 //       you may use the hashCode provided by the <K key> object
 // 
-//Hi Jie! Hi!
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
 	//TODO: Documentation
-  private static class Node<K,V> extends ArrayList<K> {
+  private static class Node<K,V> {
 	  //Instance Variables
-	  private K key;
+	  private int hash;
 	  private V value;
-	  private Node<K,V> next;
 	  
 	  //Constructor
-	  private Node () {
+	  private Node (int hash, V value) {
+	    this.hash = hash;
+	    this.value = value;
 	    }
 //    public String toString() {
 //      System.out.println("Key: " .toString(),"Value: ",value.toString());
@@ -52,7 +52,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 //	  }
 	}
   
-  private Node<K,V>[] table;
+  private ArrayList<Node<K,V>>[] table;
 	
   private int numNodes;
 	private int size;
@@ -62,14 +62,14 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 
 	// TODO: comment and complete a default no-arg constructor
 	public HashTable() {
-		table = (Node<K,V>[]) new Node<?,?>[11];
-		size = 0;
-		hashLoadFactor = 0.7;
+		this.table = new ArrayList[11];
+		this.size = 0;
+		this.hashLoadFactor = 0.7;
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
 	public HashTable(int initialCapacity, double loadFactor) {
-		this.table = (Node<K,V>[]) new Node<?,?>[initialCapacity];
+		this.table = new ArrayList[initialCapacity];
 		size = 0;
 		hashLoadFactor = loadFactor;
 		}
@@ -109,13 +109,13 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     int hash = key.hashCode();
     //Find which node to add to
     int index = hash % table.length;
-    Node<K,V> currNode = table[index];
+//    Node<K,V> currNode = table[index].get;
     
     //Loop through ArrayList to try and find value.
     for (int i = 0; i < table[index].size(); i++) {
-      if (currNode.key == key)
-        return currNode.value;
-    currNode = currNode.next;
+      if (table[index].get(i).hash == hash)
+        return table[index].get(i).value;
+    
     }
       
       throw new NoSuchElementException();
@@ -140,22 +140,24 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   private void putIndex(K key, V value) {
     int hash = key.hashCode();
     int index = hash % table.length;
+    Node<K,V> newNode = new Node<K,V>(hash,value);
     //Needed if node has never been touched before. How can we instantiate all of the lists.
-    if (table[index].key == null) {
+    if (table[index] == null) {
       //Also not adding a key/value pair.
-      table[index].add(key);
+      table[index].add(newNode);
+      
     }
-    Node<K,V> currNode = table[index];
+//    Node<K,V> currNode = table[index];
     for (int i = 0; i < table[index].size(); i++) {
       
-      if (currNode.key == key) {
-        table[index].value = value;
+      if (table[index].get(i).hash == hash) {
+        table[index].get(i).value = value;
         this.size++;
         return;
       }
-      currNode = table[index].next;
+      //currNode = table[index].next;
     }
-      table[index].add(key);
+      table[index].add(newNode);
     }    
 
 	// TODO: comment and complete this method
