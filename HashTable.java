@@ -15,11 +15,7 @@
  */
 
 
-import java.util.Map;
 import java.util.NoSuchElementException;
-
-import AVLTree.BSTNode;
-
 import java.util.ArrayList;
 
 // TODO: comment and complete your HashTableADT implementation
@@ -46,14 +42,14 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	  //Constructor
 	  private Node () {
 	    }
-    public String toString() {
-      System.out.println("Key: ",key,"Value: ",value);
-      System.out.print(next.toString());
+//    public String toString() {
+//      System.out.println("Key: " .toString(),"Value: ",value.toString());
+//      System.out.print(next.toString());
     
     //Need to add methods to get, add, and delete nodes
-      
-      
-	  }
+//      
+//      
+//	  }
 	}
   
   private Node<K,V>[] table;
@@ -144,20 +140,24 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   private void putIndex(K key, V value) {
     int hash = key.hashCode();
     int index = hash % table.length;
+    //Needed if node has never been touched before. How can we instantiate all of the lists.
+    if (table[index] == null) {
+      //Also not adding a key/value pair.
+      table[index].add(key);
+    }
     Node<K,V> currNode = table[index];
     for (int i = 0; i < table[index].size(); i++) {
       
       if (currNode.key == key) {
         table[index].value = value;
+        this.size++;
         return;
       }
       currNode = table[index].next;
     }
       table[index].add(key);
-    }
-    
-    //Is this where we call a subclass called bucket or something?
-  }
+    }    
+
 	// TODO: comment and complete this method
 	@Override
 	public void remove(K key) throws NoSuchElementException {
@@ -169,5 +169,4 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	public int size() {
 		return -1;
 	}
-		
 }
