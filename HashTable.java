@@ -14,7 +14,6 @@
  * Bugs:       TODO: add any known bugs, or unsolved problems here
  */
 
-
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
@@ -142,7 +141,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     int hash = key.hashCode();
     int index = hash % table.length;
     //Needed if node has never been touched before. How can we instantiate all of the lists.
-    if (table[index] == null) {
+    if (table[index].key == null) {
       //Also not adding a key/value pair.
       table[index].add(key);
     }
