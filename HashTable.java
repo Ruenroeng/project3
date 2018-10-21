@@ -36,7 +36,7 @@ import java.util.ArrayList;
 //       you may use the hashCode provided by the <K key> object
 //       
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	private static class Node<K,V> {
+	private static class Node<K,V> extends ArrayList<K> {
 	  //Instance Variables
 	  private K key;
 	  private V value;
@@ -48,6 +48,10 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     public String toString() {
       System.out.println("Key: ",key,"Value: ",value);
       System.out.print(next.toString());
+    
+    //Need to add methods to get, add, and delete nodes
+      
+      
 	  }
 	}
   
@@ -64,7 +68,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		table = (Node<K,V>[]) new Node<?,?>[11];
 		size = 0;
 		hashLoadFactor = 0.7;
-		
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
@@ -79,7 +82,10 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	private int getIndex(K key) {
 	  int hash = key.hashCode();
 		int index = -1;
-		index = hash % numBuckets;
+		/* I am not sure if this length is going to return the number of nodes, but if this doesn't work
+		 * we can track as a variable of the hashTable.
+		 */
+		index = hash % table.length;
 		if (index == -1) 
 		  throw new NoSuchElementException();
 		return index;
@@ -96,19 +102,22 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   public V get(K key) throws NoSuchElementException {
     if (key == null)
        return null;
-    int index = getIndex(key);
-    return null;
+    V value = getNodeIndex(key);
+    return value;
   }
   
   // TODO: comment and complete this method
   
-  private int getIndex(K key) {
+  private V getNodeIndex(K key) {
     int hash = key.hashCode();
-    int index = -1;
-    index = hash % numBuckets;
-    if (index == -1) 
+    //Find which node to add to
+    int index = hash % table.length;
+    //Loop throw ArrayList to try and find value.
+    for (int i = 0; i < table[index].size(); i++) {
+      if (table[index].key == key)
+        return table[index].value;
+    }
       throw new NoSuchElementException();
-    return index;
   }
   
   /** inserts a <key,value> pair entry into the hash table if the key already exists in the table, 
