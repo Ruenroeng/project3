@@ -31,7 +31,7 @@ import java.util.ArrayList;
 // NOTE: you are not required to design your own algorithm for hashing,
 //       you may use the hashCode provided by the <K key> object
 // 
-//Hi Jie!
+//Hi Jie! Hi!
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
 	//TODO: Documentation
   private static class Node<K,V> extends ArrayList<K> {
