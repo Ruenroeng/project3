@@ -102,13 +102,13 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   public V get(K key) throws NoSuchElementException {
     if (key == null)
        return null;
-    V value = getNodeIndex(key);
+    V value = getValue(key);
     return value;
   }
   
   // TODO: comment and complete this method
   
-  private V getNodeIndex(K key) {
+  private V getValue(K key) {
     int hash = key.hashCode();
     //Find which node to add to
     int index = hash % table.length;
