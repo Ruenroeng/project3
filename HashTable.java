@@ -17,6 +17,9 @@
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+
+import AVLTree.BSTNode;
+
 import java.util.ArrayList;
 
 // TODO: comment and complete your HashTableADT implementation
@@ -33,16 +36,33 @@ import java.util.ArrayList;
 //       you may use the hashCode provided by the <K key> object
 //       
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	private ArrayList<HashTableADT<K, V>> collisionBuckets;
-	private int numBuckets;
+	//private ArrayList<HashTableADT<K, V>> collisionBuckets;
+	private static class Node<K,V> {
+	  //Instance Variables
+	  private K key;
+	  private V value;
+	  private Node<K,V> next;
+	  
+	  //Constructor
+	  private Node () {
+	    }
+    public String toString() {
+      System.out.println("Key: ",key,"Value: ",value);
+      System.out.print(next.toString());
+	  }
+	}
+  
+  private Node<K,V>[] table;
+	
+  private int numBuckets;
 	private int size;
 	private double hashLoadFactor;
 
 	// TODO: ADD and comment DATA FIELD MEMBERS needed for your implementation
-		
+
 	// TODO: comment and complete a default no-arg constructor
 	public HashTable() {
-		collisionBuckets = new ArrayList<>();
+		table = (Node<K,V>[]) new Node<?,?>[11];
 		numBuckets = 11;
 		size = 0;
 		hashLoadFactor = 0.7;

@@ -2,3 +2,5 @@
 /HashTableADT.class
 /Profile.class
 /ProfileSample.class
+/HashTable$collisionBucket.class
+/HashTable$Node.class
