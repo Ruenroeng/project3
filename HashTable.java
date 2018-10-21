@@ -14,8 +14,6 @@
  * Bugs:       TODO: add any known bugs, or unsolved problems here
  */
 
-
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
@@ -31,43 +29,60 @@ import java.util.ArrayList;
 // TODO: explain your hashing algorithm here 
 // NOTE: you are not required to design your own algorithm for hashing,
 //       you may use the hashCode provided by the <K key> object
-//       
+// 
+//Hi Jie! Hi!
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	private ArrayList<HashTableADT<K, V>> collisionBuckets;
-	private int numBuckets;
+	//TODO: Documentation
+  private static class Node<K,V> extends ArrayList<K> {
+	  //Instance Variables
+	  private K key;
+	  private V value;
+	  private Node<K,V> next;
+	  
+	  //Constructor
+	  private Node () {
+	    }
+//    public String toString() {
+//      System.out.println("Key: " .toString(),"Value: ",value.toString());
+//      System.out.print(next.toString());
+    
+    //Need to add methods to get, add, and delete nodes
+//      
+//      
+//	  }
+	}
+  
+  private Node<K,V>[] table;
+	
+  private int numNodes;
 	private int size;
 	private double hashLoadFactor;
 
 	// TODO: ADD and comment DATA FIELD MEMBERS needed for your implementation
-		
+
 	// TODO: comment and complete a default no-arg constructor
 	public HashTable() {
-		collisionBuckets = new ArrayList<>();
-		numBuckets = 11;
+		table = (Node<K,V>[]) new Node<?,?>[11];
 		size = 0;
 		hashLoadFactor = 0.7;
-		for (int i = 0; i<numBuckets; i++){
-			collisionBuckets.add(null);
-		}
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
 	public HashTable(int initialCapacity, double loadFactor) {
-		collisionBuckets = new ArrayList<>();
-		numBuckets = initialCapacity;
+		this.table = (Node<K,V>[]) new Node<?,?>[initialCapacity];
 		size = 0;
 		hashLoadFactor = loadFactor;
-		for (int i=0; i< numBuckets; i++){
-			collisionBuckets.add(null);
 		}
-	}
  
 	// TODO: comment and complete this method
 	
 	private int getIndex(K key) {
 	  int hash = key.hashCode();
 		int index = -1;
-		index = hash % numBuckets;
+		/* I am not sure if this length is going to return the number of nodes, but if this doesn't work
+		 * we can track as a variable of the hashTable.
+		 */
+		index = hash % table.length;
 		if (index == -1) 
 		  throw new NoSuchElementException();
 		return index;
@@ -84,19 +99,26 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   public V get(K key) throws NoSuchElementException {
     if (key == null)
        return null;
-    int index = getIndex(key);
-    return null;
+    V value = getValue(key);
+    return value;
   }
   
   // TODO: comment and complete this method
   
-  private int getIndex(K key) {
+  private V getValue(K key) {
     int hash = key.hashCode();
-    int index = -1;
-    index = hash % numBuckets;
-    if (index == -1) 
+    //Find which node to add to
+    int index = hash % table.length;
+    Node<K,V> currNode = table[index];
+    
+    //Loop through ArrayList to try and find value.
+    for (int i = 0; i < table[index].size(); i++) {
+      if (currNode.key == key)
+        return currNode.value;
+    currNode = currNode.next;
+    }
+      
       throw new NoSuchElementException();
-    return index;
   }
   
   /** inserts a <key,value> pair entry into the hash table if the key already exists in the table, 
@@ -117,9 +139,25 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   
   private void putIndex(K key, V value) {
     int hash = key.hashCode();
-    int index = hash % numBuckets;
-    //Is this where we call a subclass called bucket or something?
-  }
+    int index = hash % table.length;
+    //Needed if node has never been touched before. How can we instantiate all of the lists.
+    if (table[index].key == null) {
+      //Also not adding a key/value pair.
+      table[index].add(key);
+    }
+    Node<K,V> currNode = table[index];
+    for (int i = 0; i < table[index].size(); i++) {
+      
+      if (currNode.key == key) {
+        table[index].value = value;
+        this.size++;
+        return;
+      }
+      currNode = table[index].next;
+    }
+      table[index].add(key);
+    }    
+
 	// TODO: comment and complete this method
 	@Override
 	public void remove(K key) throws NoSuchElementException {
@@ -131,5 +169,4 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	public int size() {
 		return -1;
 	}
-		
 }
