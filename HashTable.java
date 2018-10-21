@@ -36,7 +36,6 @@ import java.util.ArrayList;
 //       you may use the hashCode provided by the <K key> object
 //       
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	//private ArrayList<HashTableADT<K, V>> collisionBuckets;
 	private static class Node<K,V> {
 	  //Instance Variables
 	  private K key;
@@ -54,7 +53,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   
   private Node<K,V>[] table;
 	
-  private int numBuckets;
+  private int numNodes;
 	private int size;
 	private double hashLoadFactor;
 
@@ -63,24 +62,17 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	// TODO: comment and complete a default no-arg constructor
 	public HashTable() {
 		table = (Node<K,V>[]) new Node<?,?>[11];
-		numBuckets = 11;
 		size = 0;
 		hashLoadFactor = 0.7;
-		for (int i = 0; i<numBuckets; i++){
-			collisionBuckets.add(null);
-		}
+		
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
 	public HashTable(int initialCapacity, double loadFactor) {
-		collisionBuckets = new ArrayList<>();
-		numBuckets = initialCapacity;
+		this.table = (Node<K,V>[]) new Node<?,?>[initialCapacity];
 		size = 0;
 		hashLoadFactor = loadFactor;
-		for (int i=0; i< numBuckets; i++){
-			collisionBuckets.add(null);
 		}
-	}
  
 	// TODO: comment and complete this method
 	
