@@ -212,7 +212,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     
     System.out.println("Current Load factor = " + currentLoadFactor); 
 
-    // If the load factor is > 0.75, rehashing is done 
     if (currentLoadFactor > hashLoadFactor) { 
         System.out.println("Rehashing: " + currentLoadFactor); 
         // Rehash 
