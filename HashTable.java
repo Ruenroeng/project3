@@ -38,7 +38,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	  V value;
 	  Node<K,V> next;
 	  //Constructor
-	  public Node (K key, V value) {
+	  private Node (K key, V value) {
 	    this.key = key;
 	    this.value = value;
 	    next = null;
@@ -161,17 +161,17 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   // TODO: comment and complete this method
   
   private V getValue(K key) {
-	int getIndex = getIndex(key);
-    if (table[getIndex].get(0)==null) {
+	int index = getIndex(key);
+    if (table[index].get(0)==null) {
     	throw new NoSuchElementException();
     }
     //Loop through ArrayList to try and find value.
-    for (int i = 0; i < table[getIndex].size(); i++) {
-      if (table[getIndex].get(i)==null){
+    for (int i = 0; i < table[index].size(); i++) {
+      if (table[index].get(i)==null){
     	  throw new NoSuchElementException();
       }
-      else if (table[getIndex].get(i).key == key) {
-          return table[getIndex].get(i).value;
+      else if (table[index].get(i).key == key) {
+          return table[index].get(i).value;
         }
     }
       
@@ -195,8 +195,8 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   // TODO: comment and complete this method
   
   private void putIndex(K key, V value) {
-    int putIndex = getIndex(key);
-    Node<K,V> firstNode = table[putIndex].get(0);
+    int index = getIndex(key);
+    Node<K,V> firstNode = table[index].get(0);
     while (firstNode != null) { 
     	  
         // If already present the value is updated 
@@ -207,9 +207,9 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
         firstNode = firstNode.next; 
     } 
     Node<K,V> newNode = new Node<K,V>(key,value);
-    firstNode = table[putIndex].get(0);
+    firstNode = table[index].get(0);
     newNode.next = firstNode;
-    table[putIndex].add(0,newNode);
+    table[index].add(0,newNode);
     System.out.println(key + ":" + value + " inserted!");
     size++;
     double currentLoadFactor = (1.0 * size) / numNodes; 
