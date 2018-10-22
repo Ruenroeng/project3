@@ -55,6 +55,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   
   private ArrayList<Node<K,V>>[] table;
   private ArrayList<Integer> primeList = new ArrayList<Integer>();
+  private static final int[] primeListTest = {11,23,47,97,301,1011};
   private int primeIndex;
   private int numNodes;
   private int size;
@@ -69,7 +70,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		primeList.add(47);
 		primeList.add(97);
 		primeList.add(301);
-		primeList.add(1011);
+		primeList.add(1013);
 		primeIndex = 0;
 		numNodes = primeList.get(primeIndex);
 		primeIndex ++;
@@ -92,7 +93,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		primeList.add(47);
 		primeList.add(97);
 		primeList.add(301);
-		primeList.add(1011);
+		primeList.add(1013);
 		if (initialCapacity<11) {
 			primeIndex = 0;
 		}
@@ -108,7 +109,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		else if (initialCapacity<301) {
 			primeIndex = 4;
 		}
-		else if (initialCapacity<1011) {
+		else if (initialCapacity<1013) {
 			primeIndex = 5;
 		}
 		else {
@@ -294,6 +295,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	// TODO: comment and complete this method
 	@Override
 	public int size() {
-		return -1;
+		return table.length;
 	}
 }
