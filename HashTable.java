@@ -130,7 +130,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	// TODO: comment and complete this method
 	
 	private int getIndex(K key) {
-	  int hash = key.hashCode();
+	  int hash = Math.abs(key.hashCode());
 		int index = -1;
 		/* I am not sure if this length is going to return the number of nodes, but if this doesn't work
 		 * we can track as a variable of the hashTable.
@@ -153,22 +153,25 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     if (key == null)
        return null;
     V value = getValue(key);
+    System.out.println("Found: " + key + ":" + value);
     return value;
   }
   
   // TODO: comment and complete this method
   
   private V getValue(K key) {
-    int hash = key.hashCode();
-    //Find which node to add to
-    int index = hash % table.length;
-//    Node<K,V> currNode = table[index].get;
-    
+	int getIndex = getIndex(key);
+    if (table[getIndex].get(0)==null) {
+    	throw new NoSuchElementException();
+    }
     //Loop through ArrayList to try and find value.
-    for (int i = 0; i < table[index].size(); i++) {
-      if (table[index].get(i).key == key)
-        return table[index].get(i).value;
-    
+    for (int i = 0; i < table[getIndex].size(); i++) {
+      if (table[getIndex].get(i)==null){
+    	  throw new NoSuchElementException();
+      }
+      else if (table[getIndex].get(i).key == key) {
+          return table[getIndex].get(i).value;
+        }
     }
       
       throw new NoSuchElementException();
@@ -191,8 +194,8 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   // TODO: comment and complete this method
   
   private void putIndex(K key, V value) {
-    int putindex = getIndex(key);
-    Node<K,V> firstNode = table[putindex].get(0);
+    int putIndex = getIndex(key);
+    Node<K,V> firstNode = table[putIndex].get(0);
     while (firstNode != null) { 
     	  
         // If already present the value is updated 
@@ -203,9 +206,9 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
         firstNode = firstNode.next; 
     } 
     Node<K,V> newNode = new Node<K,V>(key,value);
-    firstNode = table[putindex].get(0);
+    firstNode = table[putIndex].get(0);
     newNode.next = firstNode;
-    table[putindex].add(0,newNode);
+    table[putIndex].add(0,newNode);
     System.out.println(key + ":" + value + " inserted!");
     size++;
     double currentLoadFactor = (1.0 * size) / numNodes; 
@@ -268,9 +271,26 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	// TODO: comment and complete this method
 	@Override
 	public void remove(K key) throws NoSuchElementException {
-
+		K returnKey = removeKey(key);
+		if (returnKey == null) {
+		      throw new NoSuchElementException();
+		}
 	}
-	
+	private K removeKey(K key){
+		int removeIndex = getIndex(key);
+	    for (int i = 0;i<table[removeIndex].size();i++){ 
+			Node<K,V> currentNode = table[removeIndex].get(i);
+			if (currentNode==null) {
+	        	return null;
+	        }
+			else if (currentNode.key.equals(key)) {
+	        	table[removeIndex].remove(i);
+	        	System.out.println("Removed - " + key + ":" + currentNode.value);
+	            return key; 
+	        }
+	    }
+	    return null;
+	}
 	// TODO: comment and complete this method
 	@Override
 	public int size() {
