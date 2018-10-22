@@ -30,17 +30,18 @@ import java.util.ArrayList;
 // NOTE: you are not required to design your own algorithm for hashing,
 //       you may use the hashCode provided by the <K key> object
 // 
-//Hi Jie! Hi!
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
 	//TODO: Documentation
-  private static class Node<K,V> extends ArrayList<K> {
+  private static class Node<K,V> {
 	  //Instance Variables
-	  private K key;
-	  private V value;
-	  private Node<K,V> next;
-	  
+	  K key;
+	  V value;
+	  Node<K,V> next;
 	  //Constructor
-	  private Node () {
+	  private Node (K key, V value) {
+	    this.key = key;
+	    this.value = value;
+	    next = null;
 	    }
 //    public String toString() {
 //      System.out.println("Key: " .toString(),"Value: ",value.toString());
@@ -52,32 +53,85 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 //	  }
 	}
   
-  private Node<K,V>[] table;
-	
+  private ArrayList<Node<K,V>>[] table;
+  private ArrayList<Integer> primeList = new ArrayList<Integer>();
+  private static final int[] primeListTest = {11,23,47,97,301,1011};
+  private int primeIndex;
   private int numNodes;
-	private int size;
-	private double hashLoadFactor;
+  private int size;
+  private double hashLoadFactor;
 
 	// TODO: ADD and comment DATA FIELD MEMBERS needed for your implementation
 
 	// TODO: comment and complete a default no-arg constructor
 	public HashTable() {
-		table = (Node<K,V>[]) new Node<?,?>[11];
-		size = 0;
-		hashLoadFactor = 0.7;
+		primeList.add(11);
+		primeList.add(23);
+		primeList.add(47);
+		primeList.add(97);
+		primeList.add(301);
+		primeList.add(1013);
+		primeIndex = 0;
+		numNodes = primeList.get(primeIndex);
+		primeIndex ++;
+		this.table = new ArrayList[numNodes];
+		this.size = 0;
+		this.hashLoadFactor = 0.7;
+		for (int i = 0; i < numNodes; i++) { 
+            table[i] = new ArrayList<Node<K,V>>();
+            table[i].add(null);
+        } 
+		System.out.println("Hash Table Created!"); 
+        System.out.println("Number of Buckets " + numNodes); 
+        System.out.println("Load Factor : " + hashLoadFactor + "\n"); 
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
 	public HashTable(int initialCapacity, double loadFactor) {
-		this.table = (Node<K,V>[]) new Node<?,?>[initialCapacity];
-		size = 0;
-		hashLoadFactor = loadFactor;
+		primeList.add(11);
+		primeList.add(23);
+		primeList.add(47);
+		primeList.add(97);
+		primeList.add(301);
+		primeList.add(1013);
+		if (initialCapacity<11) {
+			primeIndex = 0;
+		}
+		else if(initialCapacity<23) {
+			primeIndex = 1;
+		}
+		else if (initialCapacity<47) {
+			primeIndex = 2;
+		}
+		else if (initialCapacity<97) {
+			primeIndex = 3;
+		}
+		else if (initialCapacity<301) {
+			primeIndex = 4;
+		}
+		else if (initialCapacity<1013) {
+			primeIndex = 5;
+		}
+		else {
+			primeIndex = 6;
+		}
+		numNodes = initialCapacity;
+		this.table = new ArrayList[numNodes];
+		this.size = 0;
+		this.hashLoadFactor = loadFactor;
+		for (int i = 0; i < numNodes; i++) { 
+            table[i] = new ArrayList<Node<K,V>>();
+            table[i].add(null);
+        } 
+		System.out.println("Hash Table Created!"); 
+        System.out.println("Number of Buckets " + numNodes); 
+        System.out.println("Load Factor : " + hashLoadFactor + "\n"); 
 		}
  
 	// TODO: comment and complete this method
 	
 	private int getIndex(K key) {
-	  int hash = key.hashCode();
+	  int hash = Math.abs(key.hashCode());
 		int index = -1;
 		/* I am not sure if this length is going to return the number of nodes, but if this doesn't work
 		 * we can track as a variable of the hashTable.
@@ -100,22 +154,25 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     if (key == null)
        return null;
     V value = getValue(key);
+    System.out.println("Found: " + key + ":" + value);
     return value;
   }
   
   // TODO: comment and complete this method
   
   private V getValue(K key) {
-    int hash = key.hashCode();
-    //Find which node to add to
-    int index = hash % table.length;
-    Node<K,V> currNode = table[index];
-    
+	int index = getIndex(key);
+    if (table[index].get(0)==null) {
+    	throw new NoSuchElementException();
+    }
     //Loop through ArrayList to try and find value.
     for (int i = 0; i < table[index].size(); i++) {
-      if (currNode.key == key)
-        return currNode.value;
-    currNode = currNode.next;
+      if (table[index].get(i)==null){
+    	  throw new NoSuchElementException();
+      }
+      else if (table[index].get(i).key == key) {
+          return table[index].get(i).value;
+        }
     }
       
       throw new NoSuchElementException();
@@ -138,35 +195,106 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   // TODO: comment and complete this method
   
   private void putIndex(K key, V value) {
-    int hash = key.hashCode();
-    int index = hash % table.length;
-    //Needed if node has never been touched before. How can we instantiate all of the lists.
-    if (table[index].key == null) {
-      //Also not adding a key/value pair.
-      table[index].add(key);
-    }
-    Node<K,V> currNode = table[index];
-    for (int i = 0; i < table[index].size(); i++) {
-      
-      if (currNode.key == key) {
-        table[index].value = value;
-        this.size++;
-        return;
-      }
-      currNode = table[index].next;
-    }
-      table[index].add(key);
-    }    
+    int index = getIndex(key);
+    Node<K,V> firstNode = table[index].get(0);
+    while (firstNode != null) { 
+    	  
+        // If already present the value is updated 
+        if (firstNode.key.equals(key)) { 
+        	firstNode.value = value; 
+            return; 
+        } 
+        firstNode = firstNode.next; 
+    } 
+    Node<K,V> newNode = new Node<K,V>(key,value);
+    firstNode = table[index].get(0);
+    newNode.next = firstNode;
+    table[index].add(0,newNode);
+    System.out.println(key + ":" + value + " inserted!");
+    size++;
+    double currentLoadFactor = (1.0 * size) / numNodes; 
+    
+    System.out.println("Current Load factor = " + currentLoadFactor); 
 
+    if (currentLoadFactor > hashLoadFactor) { 
+        System.out.println("Rehashing: " + currentLoadFactor); 
+        // Rehash 
+        rehash(); 
+
+        System.out.println("Number of Buckets: " + numNodes + "\n"); 
+    } 
+
+    System.out.println("Number of items: " + size); 
+    System.out.println("Size of Map: " + numNodes + "\n"); 
+  }
+
+  private void rehash() 
+  { 
+      // copy current table
+	  ArrayList<Node<K,V>>[] temp = table; 
+
+      // access new size of table
+	  if(primeIndex<6) {
+		  numNodes = primeList.get(primeIndex);
+	  }
+	  else {
+		  numNodes = numNodes*2+1;
+	  }
+	  primeIndex++;
+	  table = new ArrayList[numNodes];
+	  size = 0;
+		for (int i = 0; i < numNodes; i++) { 
+          table[i] = new ArrayList<Node<K,V>>();
+          table[i].add(null);
+      } 
+		System.out.println("Hash Table Created!"); 
+      System.out.println("Number of Buckets " + numNodes); 
+      System.out.println("Load Factor : " + hashLoadFactor + "\n");
+
+      for (int i = 0; i < temp.length; i++) { 
+
+          // head of the chain at that index 
+          Node<K, V> firstNode = temp[i].get(0); 
+
+          while (firstNode != null) { 
+              K key = firstNode.key; 
+              V val = firstNode.value; 
+
+              // calling the insert function for each node in temp 
+              // as the new list is now the bucketArray 
+              put(key, val); 
+              firstNode = firstNode.next; 
+          } 
+      } 
+
+      System.out.println("Rehashed"); 
+  } 
 	// TODO: comment and complete this method
 	@Override
 	public void remove(K key) throws NoSuchElementException {
-
+		K returnKey = removeKey(key);
+		if (returnKey == null) {
+		      throw new NoSuchElementException();
+		}
 	}
-	
+	private K removeKey(K key){
+		int removeIndex = getIndex(key);
+	    for (int i = 0;i<table[removeIndex].size();i++){ 
+			Node<K,V> currentNode = table[removeIndex].get(i);
+			if (currentNode==null) {
+	        	return null;
+	        }
+			else if (currentNode.key.equals(key)) {
+	        	table[removeIndex].remove(i);
+	        	System.out.println("Removed - " + key + ":" + currentNode.value);
+	            return key; 
+	        }
+	    }
+	    return null;
+	}
 	// TODO: comment and complete this method
 	@Override
 	public int size() {
-		return -1;
+		return table.length;
 	}
 }
