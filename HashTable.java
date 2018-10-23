@@ -167,10 +167,11 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     }
     //Loop through ArrayList to try and find value.
     for (int i = 0; i < table[index].size(); i++) {
+      if (index == 128) System.out.println(table[index].get(i).key);
       if (table[index].get(i)==null){
     	  throw new NoSuchElementException();
       }
-      else if (table[index].get(i).key == key) {
+      else if (table[index].get(i).key.equals(key)) {
           return table[index].get(i).value;
         }
     }
