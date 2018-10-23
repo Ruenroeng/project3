@@ -23,24 +23,47 @@ public class Profile<K extends Comparable<K>, V> {
 	public Profile() {
 		// TODO: complete the Profile constructor
 		// Instantiate hashtable and treemap
+	  hashtable = new HashTable<K,V>();
+	  treemap = new TreeMap<K,V>();
 	}
 	
 	public void insert(K key, V value) {
 		// TODO: complete insert method
 		// Insert K, V into both hashtable and treemap
+	  hashtable.put(key, value);
+	  treemap.put(key, value);
+	  
 	}
 	
 	public void retrieve(K key) {
 		// TODO: complete the retrieve method
 		// get value V for key K from both hashtable and treemap
+	  hashtable.get(key);
+	  treemap.get(key);
 	}
 	
 	public static void main(String[] args) {
-		if (args.length < 1) {
+	  
+	  if (args.length < 1) {
 			System.out.println("Expected 1 argument: <num_elements>");
 			System.exit(1);
 		}
 		int numElements = Integer.parseInt(args[0]);
+		
+		Profile<Integer,Integer> newProfile = new Profile<Integer,Integer>();
+		
+		try {
+      for (int i=0; i<numElements; i++) {
+        newProfile.insert(i, numElements-i);
+      }
+      
+      for (int i=0; i<numElements; i++) {
+        newProfile.retrieve(i);
+      }
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 		
 		/*
 		 * TODO: complete the main method. 
