@@ -81,9 +81,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
             table[i] = new ArrayList<Node<K,V>>();
             table[i].add(null);
         } 
-		System.out.println("Hash Table Created!"); 
-        System.out.println("Number of Buckets " + numNodes); 
-        System.out.println("Load Factor : " + hashLoadFactor + "\n"); 
 	}
 	
 	// TODO: comment and complete a constructor that accepts initial capacity and load factor
@@ -122,11 +119,8 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		for (int i = 0; i < numNodes; i++) { 
             table[i] = new ArrayList<Node<K,V>>();
             table[i].add(null);
-        } 
-		System.out.println("Hash Table Created!"); 
-        System.out.println("Number of Buckets " + numNodes); 
-        System.out.println("Load Factor : " + hashLoadFactor + "\n"); 
-		}
+        }  
+	}
  
 	// TODO: comment and complete this method
 	
@@ -154,7 +148,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     if (key == null)
        return null;
     V value = getValue(key);
-    System.out.println("Found: " + key + ":" + value);
     return value;
   }
   
@@ -167,7 +160,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     }
     //Loop through ArrayList to try and find value.
     for (int i = 0; i < table[index].size(); i++) {
-      if (index == 128) System.out.println(table[index].get(i).key);
       if (table[index].get(i)==null){
     	  throw new NoSuchElementException();
       }
@@ -211,22 +203,13 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     firstNode = table[index].get(0);
     newNode.next = firstNode;
     table[index].add(0,newNode);
-    System.out.println(key + ":" + value + " inserted!");
     size++;
     double currentLoadFactor = (1.0 * size) / numNodes; 
-    
-    System.out.println("Current Load factor = " + currentLoadFactor); 
 
     if (currentLoadFactor > hashLoadFactor) { 
-        System.out.println("Rehashing: " + currentLoadFactor); 
         // Rehash 
         rehash(); 
-
-        System.out.println("Number of Buckets: " + numNodes + "\n"); 
     } 
-
-    System.out.println("Number of items: " + size); 
-    System.out.println("Size of Map: " + numNodes + "\n"); 
   }
 
   private void rehash() 
@@ -248,9 +231,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
           table[i] = new ArrayList<Node<K,V>>();
           table[i].add(null);
       } 
-		System.out.println("Hash Table Created!"); 
-      System.out.println("Number of Buckets " + numNodes); 
-      System.out.println("Load Factor : " + hashLoadFactor + "\n");
 
       for (int i = 0; i < temp.length; i++) { 
 
@@ -267,8 +247,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
               firstNode = firstNode.next; 
           } 
       } 
-
-      System.out.println("Rehashed"); 
   } 
 	// TODO: comment and complete this method
 	@Override
@@ -287,7 +265,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	        }
 			else if (currentNode.key.equals(key)) {
 	        	table[removeIndex].remove(i);
-	        	System.out.println("Removed - " + key + ":" + currentNode.value);
 	            return key; 
 	        }
 	    }
