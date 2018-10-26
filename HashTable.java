@@ -1,71 +1,67 @@
 /**
  * Filename:   HashTable.java
  * Project:    p3
- * Authors:    TODO:*  add your name(s) and lecture numbers here
+ * Authors:    Ryan Ruenroeng and Jie Gu
  *
  * Semester:   Fall 2018
  * Course:     CS400
  * 
- * Due Date:   TODO: add assignment due date and time
+ * Due Date:   10/27/2018
  * Version:    1.0
  * 
- * Credits:    TODO: name individuals and sources outside of course staff
+ * Credits:    None
  * 
- * Bugs:       TODO: add any known bugs, or unsolved problems here
+ * Bugs:       No known bugs
  */
 
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
-// TODO: comment and complete your HashTableADT implementation
-// DO NOT ADD PUBLIC MEMBERS TO YOUR CLASS
-//
-// TODO: describe the collision resolution scheme you have chosen
-// identify your scheme as open addressing or bucket
-// 
-// if open addressing: describe probe sequence 
-// if buckets: describe data structure for each bucket
-//
-// TODO: explain your hashing algorithm here 
-// NOTE: you are not required to design your own algorithm for hashing,
-//       you may use the hashCode provided by the <K key> object
-// 
+/** Hashtable implementation. Buckets of ArrayLists are chosen for collision resolution. The
+ * standard hashCode algorithm was used to hash key values.
+ * @param <K> Generic Type
+ * @param <V> Generic Type
+ */
+
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	//TODO: Documentation
+
+  /** Sub-class of the HashTable. Each Node will act as a linked list.
+   * @param <K> Generic Type
+   * @param <V> Generic Type
+   */
+  
   private static class Node<K,V> {
-	  //Instance Variables
+	//Instance Variables
 	  K key;
 	  V value;
 	  Node<K,V> next;
-	  //Constructor
+	  
+	  /**Constructor for a new Node.
+	   * @param key - unique key for a given node.
+	   * @param value - value to be stored corresponding to that key.
+	   */
 	  private Node (K key, V value) {
 	    this.key = key;
 	    this.value = value;
 	    next = null;
 	    }
-//    public String toString() {
-//      System.out.println("Key: " .toString(),"Value: ",value.toString());
-//      System.out.print(next.toString());
-    
-    //Need to add methods to get, add, and delete nodes
-//      
-//      
-//	  }
 	}
   
+  //Data Field Members
   private ArrayList<Node<K,V>>[] table;
+  
+  //List of prime numbers used to resize the HashTable
   private ArrayList<Integer> primeList = new ArrayList<Integer>();
-  private static final int[] primeListTest = {11,23,47,97,301,1011};
   private int primeIndex;
   private int numNodes;
   private int size;
   private double hashLoadFactor;
 
-	// TODO: ADD and comment DATA FIELD MEMBERS needed for your implementation
-
-	// TODO: comment and complete a default no-arg constructor
+  /**No argument constructor for a new HashTable.
+  */
 	public HashTable() {
-		primeList.add(11);
+		//Created a linked list of prime values to track size and next size of HashTable.
+	  primeList.add(11);
 		primeList.add(23);
 		primeList.add(47);
 		primeList.add(97);
@@ -81,14 +77,16 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
             table[i] = new ArrayList<Node<K,V>>();
             table[i].add(null);
         } 
-		System.out.println("Hash Table Created!"); 
-        System.out.println("Number of Buckets " + numNodes); 
-        System.out.println("Load Factor : " + hashLoadFactor + "\n"); 
 	}
+	/**Parameterized constructor for a HashTable.
+   * @param initialCapacity - unique key for a given node.
+   * @param loadFactor - A ratio of nodes with and without data. Insertion beyond the loadFactor
+   * will trigger a resizing of the HashTable.
+   */
 	
-	// TODO: comment and complete a constructor that accepts initial capacity and load factor
 	public HashTable(int initialCapacity, double loadFactor) {
-		primeList.add(11);
+	  //Created a linked list of prime values to track size and next size of HashTable.
+	  primeList.add(11);
 		primeList.add(23);
 		primeList.add(47);
 		primeList.add(97);
@@ -122,43 +120,31 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 		for (int i = 0; i < numNodes; i++) { 
             table[i] = new ArrayList<Node<K,V>>();
             table[i].add(null);
-        } 
-		System.out.println("Hash Table Created!"); 
-        System.out.println("Number of Buckets " + numNodes); 
-        System.out.println("Load Factor : " + hashLoadFactor + "\n"); 
-		}
- 
-	// TODO: comment and complete this method
-	
-	private int getIndex(K key) {
-	  int hash = Math.abs(key.hashCode());
-		int index = -1;
-		/* I am not sure if this length is going to return the number of nodes, but if this doesn't work
-		 * we can track as a variable of the hashTable.
-		 */
-		index = hash % table.length;
-		if (index == -1) 
-		  throw new NoSuchElementException();
-		return index;
+        }  
 	}
-  /*
-   *Returns:the value to which the specified key is mapped, or null if this map contains no 
-   *mapping for the key
-   *Throws:
-   *NoSuchElementException - if the specified key is null and this map does not
-   *permit null keys(optional)
-   *
-   */ 
+ 
+
+  /**Retrieval function for the HashTable. 
+   * @return - The value corresponding to the unique key stored in the table. Otherwise it will
+   * throw an exception.
+   * @param key - unique key for a value to be stored in the HashTable.
+   * @throws NoSuchElementException - if the specified key is null. This map does not permit 
+   * null keys
+   */
   @Override
   public V get(K key) throws NoSuchElementException {
     if (key == null)
        return null;
     V value = getValue(key);
-    System.out.println("Found: " + key + ":" + value);
     return value;
   }
   
-  // TODO: comment and complete this method
+  /**Helper function for the get function. 
+   * @return - The value corresponding to the unique key stored in the table. Otherwise it will
+   * throw an exception.
+   * @param key - unique key for a value to be stored in the HashTable.
+   * @throws NoSuchElementException - if the key's value cannot be located in the hashtable.
+   */
   
   private V getValue(K key) {
 	int index = getIndex(key);
@@ -170,7 +156,7 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
       if (table[index].get(i)==null){
     	  throw new NoSuchElementException();
       }
-      else if (table[index].get(i).key == key) {
+      else if (table[index].get(i).key.equals(key)) {
           return table[index].get(i).value;
         }
     }
@@ -178,12 +164,30 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
       throw new NoSuchElementException();
   }
   
-  /** inserts a <key,value> pair entry into the hash table if the key already exists in the table, 
-   *  replace existing value for that key with the value specified in this call to put.
+  /**Helper function for the getValue function. 
+   * @return - The index corresponding to the node where the key's value should be stored. 
+   * @param key - unique key for a value to be stored in the HashTable.
+   * @throws NoSuchElementException - if an index cannot be determined corresponding to the key
+   * value provided.
+   */
+  
+  private int getIndex(K key) {
+    int hash = Math.abs(key.hashCode());
+    int index = -1;
+    index = hash % table.length;
+    if (index == -1) 
+      throw new NoSuchElementException();
+    return index;
+  }
+  
+  /** Inserts a <key,value> pair entry into the hash table if the key already exists in the table. 
+   *  Replaces existing value for that key with the value specified in this call to put.
    *  Permits null values but not null keys and permits the same value to be paired 
    *  with different key.
+   *  @param key - unique key for a given node.
+   *  @param value - value to be stored corresponding to that key.
    * 
-   *  throw IllegalArgumentException when key is null
+   *  @throws IllegalArgumentException when key is null
    */
   @Override  
 	public void put(K key, V value) throws IllegalArgumentException {
@@ -192,8 +196,11 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     putIndex(key,value);
 	}
 	
-  // TODO: comment and complete this method
-  
+  /**Helper function for the getValue function. 
+   *  @param key - unique key for a given node.
+   *  @param value - value to be stored corresponding to that key.
+   */   
+    
   private void putIndex(K key, V value) {
     int index = getIndex(key);
     Node<K,V> firstNode = table[index].get(0);
@@ -210,24 +217,18 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
     firstNode = table[index].get(0);
     newNode.next = firstNode;
     table[index].add(0,newNode);
-    System.out.println(key + ":" + value + " inserted!");
     size++;
     double currentLoadFactor = (1.0 * size) / numNodes; 
-    
-    System.out.println("Current Load factor = " + currentLoadFactor); 
 
     if (currentLoadFactor > hashLoadFactor) { 
-        System.out.println("Rehashing: " + currentLoadFactor); 
         // Rehash 
         rehash(); 
-
-        System.out.println("Number of Buckets: " + numNodes + "\n"); 
     } 
-
-    System.out.println("Number of items: " + size); 
-    System.out.println("Size of Map: " + numNodes + "\n"); 
   }
-
+  /** Rehashes the the table. Intended to be called after a resize.
+   * 
+   *  @throws IllegalArgumentException when key is null
+   */
   private void rehash() 
   { 
       // copy current table
@@ -247,9 +248,6 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
           table[i] = new ArrayList<Node<K,V>>();
           table[i].add(null);
       } 
-		System.out.println("Hash Table Created!"); 
-      System.out.println("Number of Buckets " + numNodes); 
-      System.out.println("Load Factor : " + hashLoadFactor + "\n");
 
       for (int i = 0; i < temp.length; i++) { 
 
@@ -266,17 +264,31 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
               firstNode = firstNode.next; 
           } 
       } 
-
-      System.out.println("Rehashed"); 
   } 
-	// TODO: comment and complete this method
+  /** Removes a <key,value> pair entry from the hash table if the key already exists in the table. 
+   *  Permits null values but not null keys and permits the same value to be paired 
+   *  with different key.
+   *  @param key - unique key for a given node.
+   * 
+   *  @throws IllegalArgumentException when key is null.
+   *  @throws NoSuchElementException if the key value is not found in the HashTable.
+   */
 	@Override
-	public void remove(K key) throws NoSuchElementException {
+	public void remove(K key) throws IllegalArgumentException,NoSuchElementException {
+	  if (key== null)
+	      throw new IllegalArgumentException();
 		K returnKey = removeKey(key);
 		if (returnKey == null) {
 		      throw new NoSuchElementException();
 		}
 	}
+  /** Helper function to remove function. Handles the logic of finding where the key's value should
+   *  be stored and removes the value from the ArrayList using the native ArrayList remove method.
+   *  @return - The key value if the removal was successful, otherwise returns null.
+   *  @param key - unique key for a given node.
+   * 
+   *  @throws IllegalArgumentException when key is null
+   */
 	private K removeKey(K key){
 		int removeIndex = getIndex(key);
 	    for (int i = 0;i<table[removeIndex].size();i++){ 
@@ -286,13 +298,15 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
 	        }
 			else if (currentNode.key.equals(key)) {
 	        	table[removeIndex].remove(i);
-	        	System.out.println("Removed - " + key + ":" + currentNode.value);
 	            return key; 
 	        }
 	    }
 	    return null;
 	}
-	// TODO: comment and complete this method
+	/** Determines the size of the HashTable. This is equivalent to the number of nodes in the 
+	 *  HashTable.
+   *  @return - the number of nodes for the HashTable.
+   */
 	@Override
 	public int size() {
 		return table.length;
