@@ -87,11 +87,11 @@ public class Profile<K extends Comparable<K>, V> {
         newProfile.retrieve(i);
       }
     } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+       e.printStackTrace();
     }
 		
-		String msg = String.format("Successfully inserted and retreived %d elements into the hash table and treemap", numElements);
+		String msg = String.format("Successfully inserted and retreived %d elements into the hash "
+		    + "table and treemap", numElements);
 		System.out.println(msg);
 	}
 }

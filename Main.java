@@ -2,7 +2,6 @@ import java.util.NoSuchElementException;
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("What up!");
 		HashTable<String,Integer> MainTable = new HashTable<String,Integer>();
 		//This should not fail.
 		//MainTable.put(55,null);
@@ -22,17 +21,18 @@ public class Main {
 			MainTable.put("Illinois",13);
 			MainTable.get("Arkansas");
 			MainTable.get("Idaho");
-			//MainTable.get("New Hampshire");
-			//MainTable.remove("Vermont");
+//			MainTable.get("New Hampshire");
+//			MainTable.remove("Vermont");
 			MainTable.get("Hawaii");
 			MainTable.remove("Hawaii");
 			MainTable.remove("Arkansas");
-			MainTable.get("Hawaii");
+//			MainTable.get("Hawaii");
+			MainTable.remove(null);
 		} catch(NoSuchElementException e) {
 			System.out.println("There is no such element!");
 		} catch(IllegalArgumentException e) {
 			System.out.println("That is an illegal argument!");
-		}
+					}
 	}
 }
 	
