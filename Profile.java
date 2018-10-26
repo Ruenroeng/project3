@@ -1,46 +1,72 @@
 /**
  * Filename:   Profile.java
  * Project:    p3
- * Authors:    TODO: add your name(s) and lecture numbers here
+ * Authors:    Jie Gu and Ryan Ruenroeng and CS400 Epic Lecture
  *
  * Semester:   Fall 2018
  * Course:     CS400
  * 
- * Due Date:   TODO: add assignment due date and time
+ * Due Date:   10/24/2018
  * Version:    1.0
  * 
- * Credits:    TODO: name individuals and sources outside of course staff
+ * Credits:    None
  * 
- * Bugs:       TODO: add any known bugs, or unsolved problems here
+ * Bugs:       None
  */
+
+
 import java.util.TreeMap;
+
+/** 
+ * 
+ * Tests hash table implementations.
+ * 
+ */
+
+/** Generates a BST when called that will obey the rules of an AVL tree.
+ * @param <K> Generic Type
+ * @param <V> Generic Type
+ */
 
 public class Profile<K extends Comparable<K>, V> {
 
 	HashTableADT<K, V> hashtable;
 	TreeMap<K, V> treemap;
-	
+  
+  /**
+   * Constructor for the testing profile.
+   */
 	public Profile() {
-		// TODO: complete the Profile constructor
-		// Instantiate hashtable and treemap
 	  hashtable = new HashTable<K,V>();
 	  treemap = new TreeMap<K,V>();
 	}
 	
+  /**
+   * Calls the insert methods of hashtable and treemap.
+   * @param key - unique key for a given node.
+   * @param value - value to be stored corresponding to that key.
+   */
+	
 	public void insert(K key, V value) {
-		// TODO: complete insert method
-		// Insert K, V into both hashtable and treemap
 	  hashtable.put(key, value);
 	  treemap.put(key, value);
 	  
 	}
+
+  /**
+   * Calls the get methods of hashtable and treemap.
+   * @param key - unique key for a given node.
+   */	
 	
 	public void retrieve(K key) {
-		// TODO: complete the retrieve method
-		// get value V for key K from both hashtable and treemap
 	  hashtable.get(key);
 	  treemap.get(key);
 	}
+
+  /**
+   * Instantiates and tests hash table implementations.  
+   * @args1  - number of integers to insert and get from the tree implementations.
+   */
 	
 	public static void main(String[] args) {
 	  
@@ -64,15 +90,6 @@ public class Profile<K extends Comparable<K>, V> {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-		
-		/*
-		 * TODO: complete the main method. 
-		 * Create a profile object. 
-		 * For example, Profile<Integer, Integer> profile = new Profile<Integer, Integer>();
-		 * execute the insert method of profile as many times as numElements
-		 * execute the retrieve method of profile as many times as numElements
-		 * See, ProfileSample.java for example.
-		 */
 		
 		String msg = String.format("Successfully inserted and retreived %d elements into the hash table and treemap", numElements);
 		System.out.println(msg);
