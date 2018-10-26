@@ -1,59 +1,56 @@
 /**
  * Filename:   HashTable.java
  * Project:    p3
- * Authors:    TODO:*  add your name(s) and lecture numbers here
+ * Authors:    Ryan Ruenroeng and Jie Gu
  *
  * Semester:   Fall 2018
  * Course:     CS400
  * 
- * Due Date:   TODO: add assignment due date and time
+ * Due Date:   10/27/2018
  * Version:    1.0
  * 
- * Credits:    TODO: name individuals and sources outside of course staff
+ * Credits:    None
  * 
- * Bugs:       TODO: add any known bugs, or unsolved problems here
+ * Bugs:       No known bugs
  */
 
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
-// TODO: comment and complete your HashTableADT implementation
-// DO NOT ADD PUBLIC MEMBERS TO YOUR CLASS
-//
-// TODO: describe the collision resolution scheme you have chosen
-// identify your scheme as open addressing or bucket
-// 
-// if open addressing: describe probe sequence 
-// if buckets: describe data structure for each bucket
-//
-// TODO: explain your hashing algorithm here 
-// NOTE: you are not required to design your own algorithm for hashing,
-//       you may use the hashCode provided by the <K key> object
-// 
+/** Hashtable implementation. Buckets of ArrayLists are chosen for collision resolution. The
+ * standard hashCode algorithm was used to hash key values.
+ * @param <K> Generic Type
+ * @param <V> Generic Type
+ */
+
 public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V> {
-	//TODO: Documentation
+
+  /** Sub-class of the HashTable. Each Node will act as a linked list.
+   * @param <K> Generic Type
+   * @param <V> Generic Type
+   */
+  
   private static class Node<K,V> {
-	  //Instance Variables
+	//Instance Variables
 	  K key;
 	  V value;
 	  Node<K,V> next;
-	  //Constructor
+	  
+	  /**Constructor for a new Node.
+	   * @param key - unique key for a given node.
+	   * @param value - value to be stored corresponding to that key.
+	   */
 	  private Node (K key, V value) {
 	    this.key = key;
 	    this.value = value;
 	    next = null;
 	    }
-//    public String toString() {
-//      System.out.println("Key: " .toString(),"Value: ",value.toString());
-//      System.out.print(next.toString());
-    
-    //Need to add methods to get, add, and delete nodes
-//      
-//      
-//	  }
 	}
   
+  //Data Field Members
   private ArrayList<Node<K,V>>[] table;
+  
+  //List of prime numbers used to resize the HashTable
   private ArrayList<Integer> primeList = new ArrayList<Integer>();
   private static final int[] primeListTest = {11,23,47,97,301,1011};
   private int primeIndex;
@@ -61,9 +58,8 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
   private int size;
   private double hashLoadFactor;
 
-	// TODO: ADD and comment DATA FIELD MEMBERS needed for your implementation
-
-	// TODO: comment and complete a default no-arg constructor
+  /**No argument constructor for a new HashTable.
+  */
 	public HashTable() {
 		primeList.add(11);
 		primeList.add(23);
@@ -82,8 +78,12 @@ public class HashTable<K extends Comparable<K>, V> implements HashTableADT<K, V>
             table[i].add(null);
         } 
 	}
+	/**Constructor for a new Node.
+   * @param initialCapacity - unique key for a given node.
+   * @param loadFactor - A ratio of nodes with and without data. Insertion beyond the loadFactor
+   * will trigger a resizing of the HashTable.
+   */
 	
-	// TODO: comment and complete a constructor that accepts initial capacity and load factor
 	public HashTable(int initialCapacity, double loadFactor) {
 		primeList.add(11);
 		primeList.add(23);
